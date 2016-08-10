@@ -1,0 +1,13 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/elektrowolle/paper.d.ts/master//typings.json",
+    "raw": "github:elektrowolle/paper.d.ts/",
+    "files": [
+      "paper.d.ts"
+    ],
+    "global": false,
+    "name": "paper",
+    "type": "typings"
+  }
+}
