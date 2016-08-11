@@ -29,8 +29,9 @@ export class EditorPage{
 
   }
 
-  private ngOnInit() {
-    this.initPaper();
+  private ngAfterViewInit() {
+    //TODO: that's a crappy way to do it
+    setTimeout(this.initPaper.bind(this), 1000);
   }
 
 
@@ -38,8 +39,11 @@ export class EditorPage{
     let canvas :HTMLElement = document.getElementById("myCanvas");
     paper.setup("myCanvas");
     let _canvas :HTMLCanvasElement = canvas as HTMLCanvasElement;
-    let width  :number = _canvas.width;
-    let height :number = _canvas.height;
+    let width  :number = _canvas.clientWidth;
+    let height :number = _canvas.clientHeight;
+
+    //debugger;
+    console.log(paper, _canvas);
 
     paper.view.viewSize = new paper.Size(new paper.Point(width,height));
     paper.tool = new paper.Tool();
