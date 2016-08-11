@@ -8,6 +8,7 @@ import {HomePage}    from '../home/home';
 import {AboutPage}   from '../about/about';
 import {ContactPage} from '../contact/contact';
 import {EditorPage}  from '../editor/editor';
+import {LoginPage}   from "../login/login";
 
 class Page{
   public page : any;
@@ -25,12 +26,13 @@ export class MainFramePage {
   private nav     : NavController;
 
   constructor(private menuCtrl: MenuController, private navCtrl: NavController) {
-    this.rootPage = EditorPage;
+    this.rootPage = LoginPage;
     this.pages = [
-      {page: HomePage,    title:"Home"},
-      {page: AboutPage,   title:"About"},
-      {page: ContactPage, title:"Contact"},
-      {page: EditorPage,  title:"Editor"},
+      {page: HomePage,    title: "Home"},
+      {page: AboutPage,   title: "About"},
+      {page: ContactPage, title: "Contact"},
+      {page: EditorPage,  title: "Editor"},
+      {page: LoginPage,   title: "Login"},
     ]
   }
 

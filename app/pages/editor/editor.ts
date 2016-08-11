@@ -1,10 +1,11 @@
 import { Component, HostListener } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {  } from 'paper';
-import {$$iterator} from "rxjs/symbol/iterator";
 import * as paper from "paper";
 import {Size} from "paper";
 import {Point} from "paper";
+import {AngularFire} from "angularfire2/angularfire2";
+import defaultFirebase from "angularfire2/angularfire2";
 
 
 /*
@@ -23,10 +24,9 @@ export class EditorPage{
   private textItem :paper.PointText;
   private loaded   :boolean;
 
-  constructor(private navCtrl:NavController) {
 
-
-
+  constructor(private navCtrl:NavController, private fire: AngularFire) {
+    console.log(fire);
   }
 
   private ngAfterViewInit() {
@@ -101,6 +101,8 @@ export class EditorPage{
     var difference = segmentCount - newSegmentCount;
     var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
     this.textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
+
+    console.log(this.path.exportJSON());
   }
 
 }
