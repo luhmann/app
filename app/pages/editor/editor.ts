@@ -1,16 +1,10 @@
 import { Component, HostListener } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import {  } from 'paper';
-import {Path} from "paper";
-import {PointText} from "paper";
-import {Point} from "paper";
-import {ToolEvent} from "paper";
-import {PaperScope} from "paper";
-import {activate} from "paper";
-import {project} from "paper";
-import {Project} from "paper";
 import {$$iterator} from "rxjs/symbol/iterator";
 import * as paper from "paper";
+import {Size} from "paper";
+import {Point} from "paper";
 
 
 /*
@@ -32,6 +26,7 @@ export class EditorPage{
   constructor(private navCtrl:NavController) {
 
 
+
   }
 
   private ngOnInit() {
@@ -42,14 +37,19 @@ export class EditorPage{
   private initPaper(){
     let canvas :HTMLElement = document.getElementById("myCanvas");
     paper.setup("myCanvas");
+    let _canvas :HTMLCanvasElement = canvas as HTMLCanvasElement;
+    let width  :number = _canvas.width;
+    let height :number = _canvas.height;
+
+    paper.view.viewSize = new paper.Size(new paper.Point(width,height));
     paper.tool = new paper.Tool();
     paper.tool.onMouseUp   = this.onMouseUp  .bind(this);
     paper.tool.onMouseDown = this.onMouseDown.bind(this);
     paper.tool.onMouseDrag = this.onMouseDrag.bind(this);
 
     this.textItem = new paper.PointText({
-      content: 'Click and drag to draw a line.',
-      point: new Point(20, 30),
+      content  : 'Click and drag to draw a line.',
+      point    : new paper.Point(20, 30),
       fillColor: 'black',
     });
 
@@ -76,7 +76,6 @@ export class EditorPage{
   // While the user drags the mouse, points are added to the path
   // at the position of the mouse:
   private onMouseDrag(event :paper.ToolEvent) {
-    console.log(event);
     this.path.add(event.point);
 
     // Update the content of the text item to show how many

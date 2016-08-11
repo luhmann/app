@@ -23,8 +23,6 @@ export class MyApp {
 
   constructor(private platform: Platform) {
     this.rootPage = MainFramePage;
-    console.log(defaultFirebase);
-
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -34,4 +32,9 @@ export class MyApp {
     }
 }
 
-ionicBootstrap(MyApp);
+ionicBootstrap(MyApp), [FIREBASE_PROVIDERS, defaultFirebase({
+  apiKey: "AIzaSyDakq2TR4elcalv26ihMK8djrXQ7o_bpJA",
+  authDomain: "turink-1e8d9.firebaseapp.com",
+  databaseURL: "https://turink-1e8d9.firebaseio.com",
+  storageBucket: "turink-1e8d9.appspot.com",
+})];
