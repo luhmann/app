@@ -25,7 +25,7 @@ export class EditorPage{
   private textItem :paper.PointText;
   private loaded   :boolean;
 
-  constructor(private navCtrl:NavController, private ShapeRecognition:ShapeRecognition) {
+  constructor(private navCtrl:NavController, private shapeRecognition:ShapeRecognition) {
 
 
 
