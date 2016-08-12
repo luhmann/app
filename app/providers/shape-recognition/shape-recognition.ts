@@ -24,7 +24,7 @@ var shapes = [
 ];
 
 @Injectable()
-export class ShapeDetection {
+export class ShapeRecognition {
 
   constructor() {}
 
