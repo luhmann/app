@@ -1,6 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
-import { AngularFire, AuthProviders,AuthMethods } from "angularfire2/angularfire2";
+import { AngularFire, AuthProviders,AuthMethods, FirebaseAuth } from "angularfire2/angularfire2";
+import {EmailPasswordCredentials} from "angularfire2/providers/auth_backend";
+import {FirebaseAuthState} from "angularfire2/angularfire2";
+import {ModalController} from "ionic-angular/index";
+import {CreateUserModalPage} from "../create-user-modal/create-user-modal";
+import Error = firebase.auth.Error;
+import {MainFramePage} from "../mainframe/mainFrame";
+import {ToastController} from "ionic-angular/index";
 
 /*
   Generated class for the LoginPage page.
@@ -13,16 +20,52 @@ import { AngularFire, AuthProviders,AuthMethods } from "angularfire2/angularfire
 })
 export class LoginPage {
 
-  constructor(private navCtrl: NavController,
-              private fire:AngularFire) {
-    this.fire.auth.subscribe( auth=>console.log(auth));
+  private credentials :EmailPasswordCredentials;
+
+  constructor(private navCtrl:   NavController,
+              private modalCtrl: ModalController,
+              private toastCtrl: ToastController,
+              private fire:      AngularFire,
+              private auth:      FirebaseAuth)
+  {
+    this.fire.auth.subscribe(auth=>console.log(auth));
+    this.fire.auth.subscribe(this.authenticationHandler.bind(this))
+    this.auth.getAuth();
+    this.credentials = {email:"", password:""};
   }
 
   private login() {
-    this.fire.auth.login({
-      provider: AuthProviders.Google,
-      method: AuthMethods.Popup,
-    })
+    this.fire.auth.login(this.credentials, {
+      method:AuthMethods.Password,
+    }).then((state: FirebaseAuthState )=>{
+        console.log(state);
+      }
+    ).catch(this.onBadLogin.bind(this));
+  }
+
+  private onBadLogin(error :Error) {
+    (error:Error)=>console.error(error);
+    let toast = this.toastCtrl.create({
+      message:  error.message,
+      duration: 3000,
+    });
+    toast.present();
+  }
+
+  private signUp() {
+    let modal = this.modalCtrl.create(CreateUserModalPage);
+    modal.present();
+
+  }
+
+  private authenticationHandler(authState :FirebaseAuthState) {
+    if(authState){
+      this.navCtrl.setRoot(MainFramePage);
+    }
+  }
+
+  private logout(){
+    this.auth.logout();
   }
 
 

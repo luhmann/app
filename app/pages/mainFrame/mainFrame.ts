@@ -9,6 +9,7 @@ import {AboutPage}   from '../about/about';
 import {ContactPage} from '../contact/contact';
 import {EditorPage}  from '../editor/editor';
 import {LoginPage}   from "../login/login";
+import {FirebaseAuth} from "angularfire2/angularfire2";
 
 class Page{
   public page : any;
@@ -25,8 +26,11 @@ export class MainFramePage {
   private pages   : Page[];
   private nav     : NavController;
 
-  constructor(private menuCtrl: MenuController, private navCtrl: NavController) {
-    this.rootPage = LoginPage;
+  constructor(private menuCtrl: MenuController,
+              private navCtrl:  NavController,
+              private auth:     FirebaseAuth
+  ) {
+    this.rootPage = HomePage;
     this.pages = [
       {page: HomePage,    title: "Home"},
       {page: AboutPage,   title: "About"},
@@ -39,6 +43,11 @@ export class MainFramePage {
   public openPage(page :Page){
     this.rootPage = page.page;
     this.menuCtrl.close();
+  }
+
+  private logout(){
+    this.auth.logout();
+    this.navCtrl.setRoot(LoginPage);
   }
 
 }

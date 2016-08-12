@@ -14,33 +14,39 @@ import {
   AuthProviders,
   AuthMethods}
   from 'angularfire2';
+import app = firebase.app;
+import {LoginPage} from "./pages/login/login";
 
+let appProviders = [
+
+  FIREBASE_PROVIDERS,
+  defaultFirebase({
+    apiKey: "AIzaSyDakq2TR4elcalv26ihMK8djrXQ7o_bpJA",
+    authDomain: "turink-1e8d9.firebaseapp.com",
+    databaseURL: "https://turink-1e8d9.firebaseio.com",
+    storageBucket: "turink-1e8d9.appspot.com",
+  }),
+  firebaseAuthConfig({
+    provider: AuthProviders.Password,
+    method:   AuthMethods.Password,
+    remember: 'default',
+    scope: ['email']
+  })
+
+]
 
 @Component({
   templateUrl: "build/app.html",
-  providers:[
-    FIREBASE_PROVIDERS,
-    defaultFirebase({
-      apiKey: "AIzaSyDakq2TR4elcalv26ihMK8djrXQ7o_bpJA",
-      authDomain: "turink-1e8d9.firebaseapp.com",
-      databaseURL: "https://turink-1e8d9.firebaseio.com",
-      storageBucket: "turink-1e8d9.appspot.com",
-    }),
-    firebaseAuthConfig({
-      provider: AuthProviders.Password,
-      method: AuthMethods.Password,
-      remember: 'default',
-      scope: ['email']
-    })
-  ]
 })
+
+
 export class MyApp {
 
   private rootPage: any;
 
 
   constructor(private platform: Platform) {
-    this.rootPage = MainFramePage;
+    this.rootPage = LoginPage;
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -50,4 +56,4 @@ export class MyApp {
     }
 }
 
-ionicBootstrap(MyApp);
+ionicBootstrap(MyApp, appProviders);
