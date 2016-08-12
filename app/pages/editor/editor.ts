@@ -5,6 +5,7 @@ import {$$iterator} from "rxjs/symbol/iterator";
 import * as paper from "paper";
 import {Size} from "paper";
 import {Point} from "paper";
+import { ShapeDetection } from '../../providers/shape-detection/shape-detection';
 
 
 /*
@@ -15,6 +16,7 @@ import {Point} from "paper";
 */
 @Component({
   templateUrl: 'build/pages/editor/editor.html',
+  providers: [ShapeDetection]
 })
 
 
@@ -23,7 +25,7 @@ export class EditorPage{
   private textItem :paper.PointText;
   private loaded   :boolean;
 
-  constructor(private navCtrl:NavController) {
+  constructor(private navCtrl:NavController, private shapeDetection:ShapeDetection) {
 
 
 
@@ -101,6 +103,9 @@ export class EditorPage{
     var difference = segmentCount - newSegmentCount;
     var percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
     this.textItem.content = difference + ' of the ' + segmentCount + ' segments were removed. Saving ' + percentage + '%';
+
+    let closestShape = this.shapeDetection.getClosestShape(this.path);
+    console.info(closestShape.name);
   }
 
 }
