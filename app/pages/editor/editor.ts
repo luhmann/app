@@ -14,6 +14,7 @@ import {Item} from "paper";
 import {FirebaseOperation} from "angularfire2/es6/utils/firebase_list_observable";
 import Reference = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
+import {Tool} from "paper";
 
 
 /*
@@ -84,8 +85,8 @@ export class EditorPage{
     //this.paths.subscribe(this.handleSubscribtion);
 
     let reference :Reference = this.paths._ref as Reference;
-    reference.on('child_added', this.handleAddedChildren);
-    reference.on('child_changed', this.handleChangedChildren);
+    reference.on('child_added',   this.handleAddedChildren  .bind(this));
+    reference.on('child_changed', this.handleChangedChildren.bind(this));
 
   }
 
@@ -93,24 +94,31 @@ export class EditorPage{
     let firePath = data.val() as FirePath;
     let key      = data.key;
 
-    console.log("new Child", data, firePath);
-    console.log(key, firePath);
-    
-    let item = paper.project.getItem(firePath.id);
-    if(item) item.importJSON(firePath.json);
-    else new Path(firePath.json);
+
+    let item = paper.project.getItem(firePath.id) || new Path();
+    item.importJSON(firePath.json);
+    item.selected = false;
+
   }
 
   private handleChangedChildren(data :DataSnapshot){
     let firePath = data.val() as FirePath;
     let key      = data.key;
 
-    console.log("changed Child", data, firePath);
-    console.log(key, firePath);
+    let path :Path;
 
-    let item = paper.project.getItem(firePath.id);
-    if(item) item.importJSON(firePath.json);
-    else new Path(firePath.json);
+    if(!this.path || this.path.id != firePath.id) {
+      path = paper.project.getItem({id:firePath.id}) as Path;
+      if (path) {
+        path.removeChildren();
+      }
+      else {
+        path = new Path();
+      }
+      path.importJSON(firePath.json);
+      path.selected = false;
+    }
+
   }
 
   private onMouseDown(event :paper.ToolEvent) {
