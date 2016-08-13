@@ -28,7 +28,6 @@ export class LoginPage {
               private fire:      AngularFire,
               private auth:      FirebaseAuth)
   {
-    this.fire.auth.subscribe(auth=>console.log(auth));
     this.fire.auth.subscribe(this.authenticationHandler.bind(this))
     this.auth.getAuth();
     this.credentials = {email:"", password:""};
@@ -59,6 +58,7 @@ export class LoginPage {
   }
 
   private authenticationHandler(authState :FirebaseAuthState) {
+    console.log(authState);
     if(authState){
       this.navCtrl.setRoot(MainFramePage);
     }
