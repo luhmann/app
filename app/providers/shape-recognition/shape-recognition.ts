@@ -36,10 +36,7 @@ export class ShapeRecognition {
     return Math.atan2(p2.x - p1.x, p2.y - p1.y);
   }
 
-  getAverageDiff(points, path) {
-    return this.getDiff(points, path).average;
-  }
-  getDiff(shapePoints, path) {
+  getAverageDiff(shapePoints, path) {
     var averageDiff;
     var diffSum = 0;
     var diffs = [];
@@ -61,14 +58,7 @@ export class ShapeRecognition {
       }
     }
     averageDiff = diffSum / diffs.length;
-    return {
-      average: averageDiff,
-      diffs: diffs
-    };
-  }
-
-  getDiffs(points, path) {
-    return this.getDiff(points, path).diffs;
+    return averageDiff;
   }
 
   getClosestShape(path) {
