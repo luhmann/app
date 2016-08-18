@@ -8,6 +8,7 @@ import {FirebaseListObservable} from "angularfire2/angularfire2";
 import DataSnapshot = firebase.database.DataSnapshot;
 import Reference = firebase.database.Reference;
 import {ToolEvent} from "paper";
+import { ShapeRecognition } from '../../../providers/shape-recognition/shape-recognition';
 
 
 export class PenTool extends Tool {
@@ -15,7 +16,8 @@ export class PenTool extends Tool {
   private key         :string;
   private reference   :Reference;
   constructor(
-    private paths :FirebaseListObservable<any[]>
+    private paths :FirebaseListObservable<any[]>,
+    private shapeRecognition:ShapeRecognition
   )
   {
     super();
@@ -88,7 +90,8 @@ public onMouseUp(event :ToolEvent)
     let percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
     this.path.selected = false;
     this.savePathChanges();
+    let closestShape = this.shapeRecognition.getClosestShape(this.path);
+    console.info(closestShape.name);
   }
-
 
 }

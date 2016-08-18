@@ -43,7 +43,7 @@ export class EditorPage{
   constructor(private navCtrl :NavController,
               private fire    :AngularFire,
               private params  :NavParams,
-	      private shapeRecognition:ShapeRecognition)
+	            private shapeRecognition:ShapeRecognition)
   {
     let key = params.get("id");
 
@@ -67,7 +67,7 @@ export class EditorPage{
     paper.view.viewSize = new paper.Size(new paper.Point(width,height));
 
 
-    var penTool = new PenTool(this.paths);
+    var penTool = new PenTool(this.paths, this.shapeRecognition);
 
 
     this.textItem = new paper.PointText({
@@ -111,8 +111,6 @@ export class EditorPage{
       }
       path.importJSON(firePath.json);
       path.selected = false;
-      let closestShape = this.shapeRecognition.getClosestShape(path);
-      console.info(closestShape.name);
     }
 
   }
