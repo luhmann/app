@@ -3759,36 +3759,36 @@ declare module 'paper' {
         /**
          * The function to be called when the mouse button is pushed down. The function receives a ToolEvent object which contains information about the mouse event.
          */
-        onMouseDown: (event: ToolEvent) => void;
+        onMouseDown (event: ToolEvent) :void;
 
         /**
          * The function to be called when the mouse position changes while the mouse is being dragged. The function receives a ToolEvent object which contains information about the mouse event.
          */
-        onMouseDrag: (event: ToolEvent) => void;
+        onMouseDrag (event: ToolEvent)  :void;
 
         /**
          * The function to be called the mouse moves within the project view. The function receives a ToolEvent object which contains information about the mouse event.
          */
-        onMouseMove: (event: ToolEvent) => void;
+        onMouseMove (event: ToolEvent)  :void;
 
         /**
          * The function to be called when the mouse button is released. The function receives a ToolEvent object which contains information about the mouse event.
          */
-        onMouseUp: (event: ToolEvent) => void;
+        onMouseUp (event: ToolEvent)  :void;
 
         /**
          * The function to be called when the user presses a key on the keyboard.
          * The function receives a KeyEvent object which contains information about the keyboard event.
          * If the function returns false, the keyboard event will be prevented from bubbling up. This can be used for example to stop the window from scrolling, when you need the user to interact with arrow keys.
          */
-        onKeyDown: (event: KeyEvent) => void;
+        onKeyDown (event: KeyEvent)  :void;
 
         /**
          * The function to be called when the user releases a key on the keyboard.
          * The function receives a KeyEvent object which contains information about the keyboard event.
          * If the function returns false, the keyboard event will be prevented from bubbling up. This can be used for example to stop the window from scrolling, when you need the user to interact with arrow keys.
          */
-        onKeyUp: (event: KeyEvent) => void;
+        onKeyUp (event: KeyEvent)  :void;
 
         /**
          * Activates this tool, meaning paperScope.tool will point to it and it will be the one that recieves mouse events.
