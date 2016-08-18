@@ -65,15 +65,24 @@ export class ShapeRecognition {
 
   getClosestShape(path) {
     var closestShape;
-    var closestDistance;
     var relativePath = this.getRelativePoints(this.getSegmented(path));
-    shapes.forEach(function(shape, i) {
-      var distance = this.getAverageDiff(shape.points, relativePath);
-      if(typeof closestDistance === 'undefined' || distance < closestDistance) {
-        closestShape = shape;
-        closestDistance = distance;
-      }
-    }.bind(this));
+    var firstPoint = relativePath[0];
+    var lastPoint = relativePath[relativePath.length - 1];
+    var traveledX = lastPoint.x - firstPoint.x;
+    var traveledY = lastPoint.y - firstPoint.y;
+    if(Math.abs(traveledX) + Math.abs(traveledY) > 1) {
+      closestShape = this.getShapeByName('line');
+    }
+    else {
+      let closestDistance;
+      shapes.forEach(function(shape, i) {
+        var distance = this.getAverageDiff(shape.points, relativePath);
+        if(typeof closestDistance === 'undefined' || distance < closestDistance) {
+          closestShape = shape;
+          closestDistance = distance;
+        }
+      }.bind(this));
+    }
     return closestShape;
   }
 
@@ -125,6 +134,17 @@ export class ShapeRecognition {
       });
     }
     return points;
+  }
+
+  getShapeByName(name) {
+    var shape;
+    for(let i = 0; i < shapes.length; i++) {
+      if(shapes[i].name === name) {
+        shape = shapes[i];
+        break;
+      }
+    }
+    return shape;
   }
 
   relativePosition(point, shape) {
