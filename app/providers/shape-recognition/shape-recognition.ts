@@ -51,7 +51,7 @@ export class ShapeRecognition {
         var diffX = p2.x - p1.x;
         var diffY = p2.y - p1.y;
         diffSumX += diffX;
-        diffSumY = diffY;
+        diffSumY += diffY;
         nDiffs += 1;
       }
       catch(err) {
