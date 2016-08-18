@@ -38,8 +38,10 @@ export class ShapeRecognition {
 
   getAverageDiff(shapePoints, path) {
     var averageDiff;
-    var diffSum = 0;
-    var diffs = [];
+    var diffSum;
+    var diffSumX = 0;
+    var diffSumY = 0;
+    var nDiffs = 0;
     var points2 = this.getSegmented(path);
     var relativePoints1 = this.getRelativePoints(shapePoints);
     var relativePoints2 = this.getRelativePoints(points2);
@@ -49,15 +51,16 @@ export class ShapeRecognition {
         var p2 = relativePoints2[i];
         var diffX = p2.x - p1.x;
         var diffY = p2.y - p1.y;
-        var diff = Math.sqrt(Math.pow(diffX, 2) + Math.pow(diffY, 2));
-        diffs.push(diff);
-        diffSum += diff;
+        diffSumX += diffX;
+        diffSumY = diffY;
+        nDiffs += 1;
       }
       catch(err) {
         console.error(err);
       }
     }
-    averageDiff = diffSum / diffs.length;
+    diffSum = Math.sqrt(Math.pow(diffSumX, 2) + Math.pow(diffSumY, 2));
+    averageDiff = diffSum / nDiffs;
     return averageDiff;
   }
 
