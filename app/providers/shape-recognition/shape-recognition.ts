@@ -42,9 +42,8 @@ export class ShapeRecognition {
     var diffSumX = 0;
     var diffSumY = 0;
     var nDiffs = 0;
-    var points2 = this.getSegmented(path);
     var relativePoints1 = this.getRelativePoints(shapePoints);
-    var relativePoints2 = this.getRelativePoints(points2);
+    var relativePoints2 = path;
     for(var i = 0; i < relativePoints2.length; i++) {
       try {
         var p1 = relativePoints1[i];
@@ -67,8 +66,9 @@ export class ShapeRecognition {
   getClosestShape(path) {
     var closestShape;
     var closestDistance;
+    var relativePath = this.getRelativePoints(this.getSegmented(path));
     shapes.forEach(function(shape, i) {
-      var distance = this.getAverageDiff(shape.points, path);
+      var distance = this.getAverageDiff(shape.points, relativePath);
       if(typeof closestDistance === 'undefined' || distance < closestDistance) {
         closestShape = shape;
         closestDistance = distance;
