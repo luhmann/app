@@ -17,7 +17,7 @@ import {PenTool}                   from "./tools/PenTool";
 import {FirePath}                  from "./tools/FirePath";
 import Reference    = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
-import { ShapeRecognition } from '../../providers/shape-recognition/shape-recognition';
+import { NoderedIntegration } from '../../providers/nodered-integration/nodered-integration';
 
 
 /*
@@ -31,7 +31,7 @@ import { ShapeRecognition } from '../../providers/shape-recognition/shape-recogn
 
 @Component({
   templateUrl: 'build/pages/editor/editor.html',
-  providers: [ShapeRecognition]
+  providers: [NoderedIntegration]
 })
 export class EditorPage{
   private path        :Path;
@@ -43,7 +43,7 @@ export class EditorPage{
   constructor(private navCtrl :NavController,
               private fire    :AngularFire,
               private params  :NavParams,
-	            private shapeRecognition:ShapeRecognition)
+	            private noderedIntegration:NoderedIntegration)
   {
     let key = params.get("id");
 
@@ -63,16 +63,15 @@ export class EditorPage{
     let height :number = _canvas.clientHeight;
     let reference :Reference = this.paths._ref as Reference;
 
-
     paper.view.viewSize = new paper.Size(new paper.Point(width,height));
 
+    var handleFinishedPath = function(path) {
+      this.noderedIntegration.addPath(path);
+      //let paths = paper.project.getItems()[0].children;
+    };
 
     var penTool = new PenTool(this.paths);
-
-    penTool.onPathFinished = function(path) {
-      let closestShape = this.shapeRecognition.getClosestShape(path);
-      console.info(closestShape.name);
-    }.bind(this);
+    penTool.onPathFinished = handleFinishedPath.bind(this);
 
     this.textItem = new paper.PointText({
       content  : 'Click and drag to draw a line.',
