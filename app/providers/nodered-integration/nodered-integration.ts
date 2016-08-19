@@ -12,15 +12,25 @@ import { ShapeRecognition } from '../shape-recognition/shape-recognition';
 export class NoderedIntegration {
 
   private shapeRecognition:ShapeRecognition;
+  private boundingBoxes;
+  private nodes;
 
   constructor(
   ) {
     this.shapeRecognition = new ShapeRecognition();
+    this.boundingBoxes = [];
   }
 
   addPath(path) {
     let closestShape = this.shapeRecognition.getClosestShape(path);
     console.info(closestShape.name);
+    this.boundingBoxes.push(path.bounds);
+    for(let i = 0; i < this.boundingBoxes.length - 1; i++) {
+      let box = this.boundingBoxes[i];
+      if(this.overlaps(path.bounds, box)) {
+        console.log('overlap');
+      }
+    }
   }
 
   doodleToNoderedJson(arr) {
@@ -33,6 +43,15 @@ export class NoderedIntegration {
 
   diagramToNoderedJson(objects) {
 
+  }
+
+  isBetween(n1, n2, n3) {
+    return n1 >= n2 && n1 <= n3;
+  }
+
+  overlaps(box, container) {
+    return (this.isBetween(box.x, container.x, container.x + container.width)
+         && this.isBetween(box.y, container.y, container.y + container.height));
   }
 
 }
