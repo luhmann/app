@@ -67,8 +67,12 @@ export class EditorPage{
     paper.view.viewSize = new paper.Size(new paper.Point(width,height));
 
 
-    var penTool = new PenTool(this.paths, this.shapeRecognition);
+    var penTool = new PenTool(this.paths);
 
+    penTool.onPathFinished = function(path) {
+      let closestShape = this.shapeRecognition.getClosestShape(path);
+      console.info(closestShape.name);
+    }.bind(this);
 
     this.textItem = new paper.PointText({
       content  : 'Click and drag to draw a line.',
@@ -77,7 +81,9 @@ export class EditorPage{
     });
     ;
 
-    //this.paths.subscribe(this.handleSubscribtion);
+    // this.paths.subscribe(function() {
+    //   console.log('changed');
+    // });
 
     reference.on('child_added',   this.handleAddedChildren  .bind(this));
     reference.on('child_changed', this.handleChangedChildren.bind(this));

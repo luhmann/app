@@ -8,19 +8,20 @@ import {FirebaseListObservable} from "angularfire2/angularfire2";
 import DataSnapshot = firebase.database.DataSnapshot;
 import Reference = firebase.database.Reference;
 import {ToolEvent} from "paper";
-import { ShapeRecognition } from '../../../providers/shape-recognition/shape-recognition';
-
 
 export class PenTool extends Tool {
   private path        :Path;
   private key         :string;
   private reference   :Reference;
   constructor(
-    private paths :FirebaseListObservable<any[]>,
-    private shapeRecognition:ShapeRecognition
+    private paths :FirebaseListObservable<any[]>
   )
   {
     super();
+  }
+
+  public onPathFinished(path :Path) {
+    // To be overriden
   }
 
   public onMouseDown(event :ToolEvent)
@@ -49,8 +50,8 @@ export class PenTool extends Tool {
   }
 
 
-// While the user drags the mouse, points are added to the path
-// at the position of the mouse:
+  // While the user drags the mouse, points are added to the path
+  // at the position of the mouse:
   public onMouseDrag(event :ToolEvent)
   {
     this.path.add(event.point);
@@ -74,8 +75,8 @@ export class PenTool extends Tool {
     }
   };
 
-// When the mouse is released, we simplify the path:
-public onMouseUp(event :ToolEvent)
+  // When the mouse is released, we simplify the path:
+  public onMouseUp(event :ToolEvent)
   {
     let segmentCount = this.path.segments.length;
 
@@ -90,8 +91,9 @@ public onMouseUp(event :ToolEvent)
     let percentage = 100 - Math.round(newSegmentCount / segmentCount * 100);
     this.path.selected = false;
     this.savePathChanges();
-    let closestShape = this.shapeRecognition.getClosestShape(this.path);
-    console.info(closestShape.name);
+    if(typeof this.onPathFinished === 'function') {
+      this.onPathFinished(this.path);
+    }
   }
 
 }
