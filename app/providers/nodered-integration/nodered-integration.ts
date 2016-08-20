@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { ShapeRecognition } from '../shape-recognition/shape-recognition';
-
+import { Node } from './node';
 /*
   Generated class for the NoderedIntegration provider.
 
@@ -13,22 +13,59 @@ export class NoderedIntegration {
 
   private shapeRecognition:ShapeRecognition;
   private boundingBoxes;
-  private nodes;
+  private nodes:Array<Node>;
 
   constructor(
   ) {
     this.shapeRecognition = new ShapeRecognition();
     this.boundingBoxes = [];
+    this.nodes = [];
   }
 
   addPath(path) {
     let closestShape = this.shapeRecognition.getClosestShape(path);
     console.info(closestShape.name);
-    this.boundingBoxes.push(path.bounds);
-    for(let i = 0; i < this.boundingBoxes.length - 1; i++) {
-      let box = this.boundingBoxes[i];
-      if(this.overlaps(path.bounds, box)) {
-        console.log('overlap');
+    if(closestShape.name == 'line') {
+      let fromNode;
+      let toNode;
+      let firstPoint = path.getPointAt(0);
+      let lastPoint = path.getPointAt(path.length);
+      for(let i = 0; i < this.nodes.length; i++) {
+        let node = this.nodes[i];
+        if(node.bounds.contains(firstPoint)) {
+          fromNode = node;
+        }
+        if(node.bounds.contains(lastPoint)) {
+          toNode = node;
+        }
+      }
+      if(typeof fromNode == 'undefined') {
+        console.warn("Warning! No origin node found for line. Not connecting anything.");
+      }
+      else if(typeof toNode == 'undefined') {
+        console.warn("Warning! No target node found for line. Not connecting anything.");
+      }
+      else if(fromNode === toNode) {
+        console.warn("Warning! A line is connecting a node with itself. Not connecting anything.");
+      }
+      else {
+        fromNode.connectTo(toNode);
+        console.info('connected node', fromNode.id, 'to', toNode.id);
+      }
+    }
+    else {
+      let merged = false;
+      for(let i = 0; i < this.nodes.length; i++) {
+        let node = this.nodes[i];
+        if(node.overlaps(path)) {
+          node.addPath(path);
+          merged = true;
+        }
+      }
+      if(!merged) {
+        let node = new Node();
+        node.addPath(path);
+        this.nodes.push(node);
       }
     }
   }
@@ -43,15 +80,6 @@ export class NoderedIntegration {
 
   diagramToNoderedJson(objects) {
 
-  }
-
-  isBetween(n1, n2, n3) {
-    return n1 >= n2 && n1 <= n3;
-  }
-
-  overlaps(box, container) {
-    return (this.isBetween(box.x, container.x, container.x + container.width)
-         && this.isBetween(box.y, container.y, container.y + container.height));
   }
 
 }
