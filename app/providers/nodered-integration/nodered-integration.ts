@@ -58,13 +58,13 @@ export class NoderedIntegration {
       for(let i = 0; i < this.nodes.length; i++) {
         let node = this.nodes[i];
         if(node.overlaps(path)) {
-          node.addPath(path);
+          node.addPath(path, closestShape.name);
           merged = true;
         }
       }
       if(!merged) {
         let node = new Node();
-        node.addPath(path);
+        node.addPath(path, closestShape.name);
         this.nodes.push(node);
       }
     }
