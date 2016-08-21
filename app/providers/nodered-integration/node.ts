@@ -5,6 +5,7 @@
 import { Path } from 'paper';
 import { Point } from 'paper';
 import { Rectangle } from 'paper';
+import { PointText } from 'paper';
 
 var nodeTypes = [
   {
@@ -17,17 +18,20 @@ var nodeTypes = [
     'nodered-nodename': 'inject'
   },
   {
-    name: 'counter',
+    name: 'container',
     symbols: ["square"],
     processInput: function(input?) {
       return this.paths.length - 1;
     }
   },
   {
-    name: 'debug',
+    name: 'debug log',
     symbols: ['square', 'square'],
     processInput: function(input?) {
-      console.info(input);
+      if(typeof input != 'undefined') {
+        console.info(input);
+      }
+      return input;
     }
   }
 ];
@@ -41,13 +45,26 @@ export class Node {
   public bounds:Rectangle;
   public timestamp:Date;
   public type:string;
-  constructor() {
-    this.id = this.generateId();
-    this.paths = [];
-    this.symbols = [];
-    this.wires = [];
-    this.outputs = [];
-    this.timestamp = new Date();
+  public textItem:PointText;
+  constructor(node?) {
+    if(typeof node != 'undefined') {
+      // Create from an already existing node
+      // This can be useful when changing a node's type
+      this.id = node.id;
+      this.paths = node.paths;
+      this.symbols = node.symbols;
+      this.wires = node.wires;
+      this.outputs = node.outputs;
+      this.timestamp = node.timestamp;
+    }
+    else {
+      this.id = this.generateId();
+      this.paths = [];
+      this.symbols = [];
+      this.wires = [];
+      this.outputs = [];
+      this.timestamp = new Date();
+    }
   }
   addPath(path, symbol?) {
     if(typeof this.bounds === 'undefined') {
@@ -92,18 +109,31 @@ export class Node {
         if(typeof nodeType['processInput'] == 'function') {
           this.processInput = nodeType['processInput'].bind(this);
         }
+        if(nodeType.name == 'debug log') {
+          this.textItem = new PointText({
+            fillColor: 'black',
+            content: '',
+            point: this.getCenter(),
+            style: {
+              'text-align': 'center'
+            }
+          });
+        }
         break;
       }
     }
   }
 
   processInput(input?) {
-
+    return input;
   }
 
   // Process input and pass it to all nodes connected to the outputs
   digest(input?) {
     let value = this.processInput(input);
+    if(typeof this['textItem'] != 'undefined' && typeof value != 'undefined') {
+      this['textItem'].content = value.toString();
+    }
     for(let i = 0; i < this.outputs.length; i++) {
       let outputNode = this.outputs[i];
       outputNode.digest(value);
@@ -115,4 +145,26 @@ export class Node {
     return (1+Math.random()*4294967295).toString(16);
   }
 
+  getCenter() {
+    return new Point((this.bounds.right + this.bounds.left)/2, (this.bounds.bottom + this.bounds.top)/2);
+  }
+
+}
+
+export class DebugNode extends Node {
+  public textItem:PointText;
+  constructor(node?) {
+    super();
+    this.textItem = new PointText({
+      fillColor: 'black',
+      content: '',
+      point: this.getCenter(),
+      style: {
+        'text-align': 'center'
+      }
+    });
+  }
+  getCenter() {
+    return new Point((this.bounds.right + this.bounds.left)/2, (this.bounds.bottom + this.bounds.top)/2);
+  }
 }
