@@ -46,7 +46,7 @@ export class NoderedIntegration {
         console.warn("Warning! No target node found for line. Not connecting anything.");
       }
       else if(fromNode === toNode) {
-        console.warn("Warning! A line is connecting a node with itself. Not connecting anything.");
+        fromNode.addPath(path);
       }
       else {
         fromNode.connectTo(toNode);
@@ -68,6 +68,7 @@ export class NoderedIntegration {
         this.nodes.push(node);
       }
     }
+    this.flow();
   }
 
   doodleToNoderedJson(arr) {
@@ -80,6 +81,13 @@ export class NoderedIntegration {
 
   diagramToNoderedJson(objects) {
 
+  }
+
+  flow() {
+    for(let i = 0; i < this.nodes.length; i++) {
+      let node = this.nodes[i];
+      node.digest();
+    }
   }
 
 }

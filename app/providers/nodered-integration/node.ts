@@ -14,7 +14,21 @@ var nodeTypes = [
   {
     name: 'button',
     symbols: ["circle", "square"],
-    'nodered-node': 'node-red-contrib-nr-injector'
+    'nodered-nodename': 'inject'
+  },
+  {
+    name: 'counter',
+    symbols: ["square"],
+    processInput: function(input?) {
+      return this.paths.length - 1;
+    }
+  },
+  {
+    name: 'debug',
+    symbols: ['square', 'square'],
+    processInput: function(input?) {
+      console.info(input);
+    }
   }
 ];
 
@@ -23,6 +37,7 @@ export class Node {
   public paths:Array<Path>;
   public symbols:Array<string>;
   public wires:Array<string>;
+  public outputs:Array<Node>;
   public bounds:Rectangle;
   public timestamp:Date;
   public type:string;
@@ -31,6 +46,7 @@ export class Node {
     this.paths = [];
     this.symbols = [];
     this.wires = [];
+    this.outputs = [];
     this.timestamp = new Date();
   }
   addPath(path, symbol?) {
@@ -47,9 +63,11 @@ export class Node {
     if(typeof symbol !== 'undefined') {
       this.addSymbol(symbol);
     }
+    this.paths.push(path);
   }
   connectTo(node) {
     this.wires.push(node.id);
+    this.outputs.push(node);
   }
 
   overlaps(path) {
@@ -65,19 +83,35 @@ export class Node {
       let matches = symbols.length == this.symbols.length;
       if(matches) {
         for(let j = 0; j < symbols.length && j < this.symbols.length; j++) {
-          matches = this.symbols[j] === symbols[j];
+          matches = matches && this.symbols[j] === symbols[j];
         }
       }
       if(matches) {
         console.info('Hey, this is a ' + nodeType.name + '!');
-        this.type = nodeType['node-red-node'];
+        this.type = nodeType.name;
+        if(typeof nodeType['processInput'] == 'function') {
+          this.processInput = nodeType['processInput'].bind(this);
+        }
         break;
       }
     }
   }
 
+  processInput(input?) {
+
+  }
+
+  // Process input and pass it to all nodes connected to the outputs
+  digest(input?) {
+    let value = this.processInput(input);
+    for(let i = 0; i < this.outputs.length; i++) {
+      let outputNode = this.outputs[i];
+      outputNode.digest(value);
+    }
+  }
+
+  // Copied from Node-Red; /red/runtime/util.js
   generateId() {
-    // Copied from Node-Red; /red/runtime/util.js
     return (1+Math.random()*4294967295).toString(16);
   }
 
