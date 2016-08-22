@@ -81,7 +81,7 @@ export class PenTool extends Tool {
     let segmentCount = this.path.segments.length;
 
     // When the mouse is released, simplify it:
-    this.path.simplify(10);
+    this.path.simplify();
 
     // Select the path, so we can see its segments:
     this.path.fullySelected = true;
