@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import { Path } from 'paper';
-import { Color } from 'paper';
-import { Gradient } from 'paper';
+// import { Path } from 'paper';
+// import { Color } from 'paper';
+// import { Gradient } from 'paper';
 
 /*
   Generated class for the Shape provider.
