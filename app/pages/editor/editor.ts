@@ -17,7 +17,7 @@ import {PenTool}                   from "./tools/PenTool";
 import {FirePath}                  from "./tools/FirePath";
 import Reference    = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
-import { NoderedIntegration } from '../../providers/nodered-integration/nodered-integration';
+import { NodeRecognition } from '../../providers/node-recognition/nodered-integration';
 
 
 /*
@@ -31,7 +31,7 @@ import { NoderedIntegration } from '../../providers/nodered-integration/nodered-
 
 @Component({
   templateUrl: 'build/pages/editor/editor.html',
-  providers: [NoderedIntegration]
+  providers: [NodeRecognition]
 })
 export class EditorPage{
   private path        :Path;
@@ -43,7 +43,7 @@ export class EditorPage{
   constructor(private navCtrl :NavController,
               private fire    :AngularFire,
               private params  :NavParams,
-	            private noderedIntegration:NoderedIntegration)
+	            private nodeRecognition:NodeRecognition)
   {
     let key = params.get("id");
 
@@ -66,7 +66,7 @@ export class EditorPage{
     paper.view.viewSize = new paper.Size(new paper.Point(width,height));
 
     var handleFinishedPath = function(path) {
-      this.noderedIntegration.addPath(path);
+      this.nodeRecognition.addPath(path);
       //let paths = paper.project.getItems()[0].children;
     };
 

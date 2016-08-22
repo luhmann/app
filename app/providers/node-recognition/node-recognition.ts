@@ -3,13 +3,13 @@ import 'rxjs/add/operator/map';
 import { ShapeRecognition } from '../shape-recognition/shape-recognition';
 import { Node } from './node';
 /*
-  Generated class for the NoderedIntegration provider.
+  Generated class for the NodeRecognition provider.
 
   See https://angular.io/docs/ts/latest/guide/dependency-injection.html
   for more info on providers and Angular 2 DI.
 */
 @Injectable()
-export class NoderedIntegration {
+export class NodeRecognition {
 
   private shapeRecognition:ShapeRecognition;
   private boundingBoxes;
