@@ -17,7 +17,7 @@ import {PenTool}                   from "./tools/PenTool";
 import {FirePath}                  from "./tools/FirePath";
 import Reference    = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
-import { NodeRecognition } from '../../providers/node-recognition/nodered-integration';
+import { NodeRecognition } from '../../providers/node-recognition/node-recognition';
 
 
 /*
