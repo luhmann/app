@@ -86,6 +86,11 @@ export class ShapeRecognition {
 
   getClosestShape(path) {
     // console.log(JSON.stringify(this.getRelativePoints(this.getSegmented(path))));
+    if(path.length == 0) {
+      return {
+        name: 'point'
+      }
+    }
     var closestShape;
     var relativePath = this.getRelativePoints(this.getSegmented(path));
     var firstPoint = relativePath[0];

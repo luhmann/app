@@ -15,8 +15,10 @@ import {Item}                      from "paper";
 import {Tool}                      from "paper";
 import {PenTool}                   from "./tools/PenTool";
 import {FirePath}                  from "./tools/FirePath";
+import { ActionTool }              from './tools/ActionTool';
 import Reference    = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
+import { Node } from '../../providers/node-recognition/node';
 import { NodeRecognition } from '../../providers/node-recognition/node-recognition';
 
 
@@ -70,15 +72,20 @@ export class EditorPage{
       //let paths = paper.project.getItems()[0].children;
     };
 
+    var onTouch = function() {
+      console.log('touch!');
+    };
+
     var penTool = new PenTool(this.paths);
+    var actionTool = new ActionTool();
     penTool.onPathFinished = handleFinishedPath.bind(this);
+    actionTool.onTouch = onTouch.bind(this);
 
     this.textItem = new paper.PointText({
       content  : 'Click and drag to draw a line.',
       point    : new paper.Point(20, 30),
       fillColor: 'black',
     });
-    ;
 
     // this.paths.subscribe(function() {
     //   console.log('changed');

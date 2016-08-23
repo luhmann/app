@@ -40,8 +40,9 @@ export class Node {
   public id:string;
   public paths:Array<Path>;
   public symbols:Array<string>;
-  public wires:Array<string>;
+  public inputs:Array<Node>;
   public outputs:Array<Node>;
+  public wires:Array<string>;
   public bounds:Rectangle;
   public timestamp:Date;
   public type:string;
@@ -53,16 +54,18 @@ export class Node {
       this.id = node.id;
       this.paths = node.paths;
       this.symbols = node.symbols;
-      this.wires = node.wires;
+      this.inputs = node.inputs;
       this.outputs = node.outputs;
+      this.wires = node.wires;
       this.timestamp = node.timestamp;
     }
     else {
       this.id = this.generateId();
       this.paths = [];
       this.symbols = [];
-      this.wires = [];
+      this.inputs = [];
       this.outputs = [];
+      this.wires = [];
       this.timestamp = new Date();
     }
   }
@@ -83,8 +86,9 @@ export class Node {
     this.paths.push(path);
   }
   connectTo(node) {
-    this.wires.push(node.id);
+    node.inputs.push(this);
     this.outputs.push(node);
+    this.wires.push(node.id);
   }
 
   overlaps(path) {
