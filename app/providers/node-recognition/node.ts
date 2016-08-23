@@ -15,7 +15,10 @@ var nodeTypes = [
   {
     name: 'button',
     symbols: ["circle", "square"],
-    'nodered-nodename': 'inject'
+    'nodered-nodename': 'inject',
+    processInput: function(input?) {
+      return input || false;
+    }
   },
   {
     name: 'container',

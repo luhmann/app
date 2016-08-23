@@ -57,7 +57,7 @@ export class NodeRecognition {
       case 'point':
         console.log('Click!');
         this.getOverlappingNodes(path).forEach(function (node) {
-          node.digest();
+          node.digest(true);
         });
         break;
       default:
