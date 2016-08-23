@@ -97,7 +97,7 @@ export class ShapeRecognition {
     var lastPoint = relativePath[relativePath.length - 1];
     var traveledX = lastPoint.x - firstPoint.x;
     var traveledY = lastPoint.y - firstPoint.y;
-    if(Math.abs(traveledX) + Math.abs(traveledY) > 1) {
+    if(Math.abs(traveledX) + Math.abs(traveledY) >= 1) {
       closestShape = this.getShapeByName('line');
     }
     else {
@@ -135,8 +135,8 @@ export class ShapeRecognition {
     for(i = 0; i < points.length; i++) {
       point = points[i];
       relativePoints.push({
-        x: (point.x - boundingBox.left) / (boundingBox.right - boundingBox.left),
-        y: (point.y - boundingBox.top) / (boundingBox.bottom - boundingBox.top)
+        x: (point.x - boundingBox.left) / Math.max(1, (boundingBox.right - boundingBox.left)),
+        y: (point.y - boundingBox.top) / Math.max(1, (boundingBox.bottom - boundingBox.top))
       });
     }
     return relativePoints;
