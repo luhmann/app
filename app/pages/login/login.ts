@@ -28,8 +28,8 @@ export class LoginPage {
               private fire:      AngularFire,
               private auth:      FirebaseAuth)
   {
-    this.fire.auth.subscribe(this.authenticationHandler.bind(this))
-    this.auth.getAuth();
+    this.fire.auth.subscribe(this.authenticationHandler.bind(this));
+    // this.auth.getAuth();
     this.credentials = {email:"", password:""};
   }
 
