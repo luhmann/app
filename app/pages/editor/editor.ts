@@ -1,5 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 import { NavController }           from 'ionic-angular';
+import { PopoverController }       from 'ionic-angular';
 import * as paper                  from "paper";
 import {Size}                      from "paper";
 import {Point}                     from "paper";
@@ -20,7 +21,7 @@ import Reference    = firebase.database.Reference;
 import DataSnapshot = firebase.database.DataSnapshot;
 import { Node } from '../../providers/node-recognition/node';
 import { NodeRecognition } from '../../providers/node-recognition/node-recognition';
-
+import { NodeDialog } from '../../providers/node-dialog-provider/node-dialog.ts';
 
 /*
   Generated class for the EditorPage page.
@@ -45,7 +46,8 @@ export class EditorPage{
   constructor(private navCtrl :NavController,
               private fire    :AngularFire,
               private params  :NavParams,
-	            private nodeRecognition:NodeRecognition)
+	            private nodeRecognition: NodeRecognition,
+              public popoverCtrl: PopoverController)
   {
     let key = params.get("id");
 
@@ -69,6 +71,7 @@ export class EditorPage{
 
     var handleFinishedPath = function(path) {
       this.nodeRecognition.addPath(path);
+      this.presentPopover();
       //let paths = paper.project.getItems()[0].children;
     };
 
@@ -125,6 +128,15 @@ export class EditorPage{
       path.selected = false;
     }
 
+  }
+
+  presentPopover() {
+    /* See
+       http://ionicframework.com/docs/v2/api/components/popover/PopoverController/
+       for how to use the popover controller
+    */
+    let popover = this.popoverCtrl.create(NodeDialog);
+    popover.present();
   }
 
 }
